@@ -4,17 +4,17 @@ from django.db import IntegrityError
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, permissions, status, viewsets, mixins
+from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from reviews.models import Category, Genre, Review, Title, User
+
 from .filters import TitlesFilter
-from .permissions import (AdminOnly,
-                          IsAuthorAdminModerOrReadOnly,
-                          IsAdminOrReadOnly)
+from .permissions import (AdminOnly, IsAdminOrReadOnly,
+                          IsAuthorAdminModerOrReadOnly)
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, GetTokenSerializer,
                           RegistrationSerializer, ReviewSerializer,
@@ -134,7 +134,7 @@ class AuthTokenView(APIView):
             user.confirmation_code = settings.PLACEHOLDER
             user.save()
             return Response(
-                {"wrong_code": "Неверный код подтверждения. Запросите новый."},
+                {'wrong_code': 'Неверный код подтверждения. Запросите новый.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         token = RefreshToken.for_user(user)
@@ -159,7 +159,7 @@ class UserViewSet(viewsets.ModelViewSet):
         permission_classes=[permissions.IsAuthenticated],
     )
     def me(self, request):
-        if request.method == "GET":
+        if request.method == 'GET':
             serializer = self.get_serializer(request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         serializer = self.get_serializer(
